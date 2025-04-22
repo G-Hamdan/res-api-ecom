@@ -1,70 +1,54 @@
-const User = require("../models/userModels")
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const { ObjectId } = require("mongodb");
+const { getDB } = require("../utils/db");
 
-exports.verifyToken = async (req, res, next) =>{
-    if (!req.headers.authorization) {
-        return res.status(403).send({ message: "No token provided!" });
+// ✅ Common function to get user from token
+async function getUserFromToken(req, res) {
+  if (!req.headers.authorization || !req.headers.authorization.startsWith("Bearer ")) {
+    return { error: { status: 403, message: "No token provided!" } };
+  }
+
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.SECRET_TOKEN_KEY);
+    req.userId = decoded.userId;
+
+    const db = getDB();
+    const user = await db.collection("users").findOne({ _id: new ObjectId(req.userId) });
+
+    if (!user) {
+      return { error: { status: 404, message: "User not found!" } };
     }
 
-    try {
-        const token = req.headers.authorization.split(" ")[1];
-        const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN_KEY);
-        req.userId = decodedToken.userId;
-        const user= await User.findById(req.userId)
-        
-        if (!user){
-            return res.status(404).send({ message: "User not found!" });
-        }
-        next();
-    } catch (err) {
-        return res.status(401).send({ message: "Unauthorized!" });
-    }
+    return { user };
+  } catch (err) {
+    return { error: { status: 401, message: "Unauthorized!", detail: err.message } };
+  }
 }
 
-exports.verifyAdmin = async (req, res, next) => {
-    if (!req.headers.authorization) {
-        return res.status(403).send({ message: "No token provided!" });
-    }
-
-    try {
-        const token = req.headers.authorization.split(" ")[1];
-        const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN_KEY);
-        req.userId = decodedToken.userId;
-        const user = await User.findById(req.userId);
-        
-        if (!user) {
-            return res.status(404).send({ message: "User not found!" });
-        }
-
-        if (user.role !== "admin") {
-            return res.status(403).send({ message: "Access denied. Admins only!" });
-        }
-
-        req.userRole = user.role;
-        next();
-    } catch (err) {
-        return res.status(401).send({ message: "Unauthorized!" });
-    }
+// ✅ Middleware: verifyToken (any user)
+exports.verifyToken = async (req, res, next) => {
+  const { user, error } = await getUserFromToken(req, res);
+  if (error) return res.status(error.status).json({ message: error.message });
+  next();
 };
 
+// ✅ Middleware: verifyAdmin (must be admin)
+exports.verifyAdmin = async (req, res, next) => {
+  const { user, error } = await getUserFromToken(req, res);
+  if (error) return res.status(error.status).json({ message: error.message });
+
+  if (user.role !== "admin") {
+    return res.status(403).json({ message: "Access denied. Admins only!" });
+  }
+
+  req.userRole = user.role;
+  next();
+};
+
+// ✅ Middleware: verifyUser (alias for token validation)
 exports.verifyUser = async (req, res, next) => {
-    if (!req.headers.authorization) {
-        return res.status(403).send({ message: "No token provided!" });
-    }
-
-    try {
-        const token = req.headers.authorization.split(" ")[1];
-        const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN_KEY);
-        req.userId = decodedToken.userId;
-
-        // Check if user exists
-        const user = await User.findById(req.userId);
-        if (!user) {
-            return res.status(404).send({ message: "User not found!" });
-        }
-
-        next();
-    } catch (err) {
-        return res.status(401).send({ message: "Unauthorized!" });
-    }
+  const { user, error } = await getUserFromToken(req, res);
+  if (error) return res.status(error.status).json({ message: error.message });
+  next();
 };

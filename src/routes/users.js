@@ -8,6 +8,7 @@ const upload = require("../middleware/multerConfig")
 const sharpMiddleware = require("../middleware/sharpMiddleware")
 
 
+
 router.get("/", async (req, res) => {
     try {
       const db = getDB();
