@@ -1,4 +1,4 @@
-const uri = "http://localhost:3000/api/products/seeProductId"
+const uri = "https://res-api-ecom.onrender.com/api/products/seeProductId"
 
 
 export const fetchProductById = async (_id) => {

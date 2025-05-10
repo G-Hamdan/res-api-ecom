@@ -28,7 +28,7 @@ const SignUpPage = ({ setIsLoggedIn }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3000/api/users/signup", {
+      const response = await fetch("https://res-api-ecom.onrender.com/api/users/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
