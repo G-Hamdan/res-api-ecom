@@ -6,7 +6,7 @@ const { verifyToken } = require("../middleware/auth");
 const { getDB } = require("../utils/db");
 const upload = require("../middleware/multerConfig");
 const sharpMiddleware = require("../middleware/sharpMiddleware");
-const { ObjectId } = require("mongodb"); // Don't forget to import ObjectId for MongoDB queries
+const { ObjectId } = require("mongodb"); // For MongoDB query handling
 
 // Get all users (for testing or admin purposes)
 router.get("/", async (req, res) => {
@@ -32,21 +32,38 @@ router.post("/test", verifyToken, (req, res) => {
 });
 
 // Update user route (protected by verifyToken)
-router.put("/userUpdate", verifyToken, upload.single("image"), sharpMiddleware(), (req, res) => {
+router.put("/userUpdate", verifyToken, upload.single("image"), sharpMiddleware(), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "Error uploading the file. Wrong format?" });
   }
-  console.log(req.body); // Logs form fields
-  console.log(req.file); // Logs uploaded file details
-  console.log(req.userId); // From the verifyToken middleware
-  const fileUrl = req.protocol + "://" + req.get("host") + "/" + req.file.processedPath;
-  res.json({ message: "User response reached", fileUrl });
+
+  try {
+    console.log(req.body); // Logs form fields
+    console.log(req.file); // Logs uploaded file details
+    console.log(req.userId); // Logs userId from the verifyToken middleware
+
+    const fileUrl = req.protocol + "://" + req.get("host") + "/" + req.file.processedPath;
+
+    // Update user data in the database
+    const db = getDB();
+    const updateResult = await db.collection("users").updateOne(
+      { _id: new ObjectId(req.userId) },
+      { $set: { ...req.body, imageUrl: fileUrl } } // Assuming 'imageUrl' is added to user data
+    );
+
+    if (updateResult.modifiedCount === 0) {
+      return res.status(404).json({ message: "User not found or no changes made" });
+    }
+
+    res.json({ message: "User data updated successfully", fileUrl });
+  } catch (err) {
+    res.status(500).json({ message: "Error updating user data", error: err.message });
+  }
 });
 
 // Get the current user's data (protected by verifyToken)
 router.get("/me", verifyToken, async (req, res) => {
   try {
-    // The `verifyToken` middleware sets the `userId` in `req.userId`
     const db = getDB();
     const user = await db.collection("users").findOne({ _id: new ObjectId(req.userId) });
 
@@ -54,7 +71,7 @@ router.get("/me", verifyToken, async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Send back the user details (excluding the password)
+    // Send back the user details excluding the password
     const { password, ...userData } = user;
     res.json(userData);
   } catch (err) {
