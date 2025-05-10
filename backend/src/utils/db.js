@@ -1,8 +1,10 @@
+require("dotenv").config(); // This loads variables from the .env file into process.env
+
 const { MongoClient } = require("mongodb");
 
-const uri = process.env.MONGO_URI;
+const uri = process.env.MONGO_URI; // MongoDB URI from environment variables
+const dbName = process.env.DB_NAME || "ecommerce"; // Database name from env, fallback to 'ecommerce'
 
-// Create the MongoClient instance
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -14,7 +16,7 @@ let db; // This will hold our connected database
 const connectDB = async () => {
   try {
     await client.connect(); // Establish the connection
-    db = client.db("ecommerce"); // Use your specific DB name
+    db = client.db(dbName); // Use the database name from the environment variable
     console.log("✅ Connected to MongoDB using native driver");
   } catch (err) {
     console.error("❌ Error connecting to MongoDB:", err);
@@ -30,5 +32,5 @@ const getDB = () => {
   return db;
 };
 
-// Export both functions
+// Export both functions for use in other parts of the application
 module.exports = { connectDB, getDB };

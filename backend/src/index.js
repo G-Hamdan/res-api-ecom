@@ -1,45 +1,24 @@
-require("dotenv").config();
-
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const { connectDB } = require("./utils/db"); // Import the connectDB function
+
 const app = express();
 const port = process.env.PORT || 3000;
 
-const userRoutes = require("./routes/users.js");
-const productRoutes = require("./routes/products.js");
-const invoiceRoutes = require("./routes/invoices.js");
-const { connectDB } = require("./utils/db.js");
-
-// MIDDLEWARE
-app.use(cors()); // 
-app.use(express.json());
-app.use((req, res, next) => {
-  req.requestTime = Date.now();
-  req.arithmetical_value = 4 * 7;
-  next();
-});
-
-// ✅ Ensure DB is connected before registering routes
+// Ensure DB is connected before starting the server
 connectDB().then(() => {
   console.log("✅ DB connection established");
 
-  // ROUTES
-  app.use("/api/users", userRoutes);
-  app.use("/api/products", productRoutes);
-  app.use("/api/invoices", invoiceRoutes);
+  // Middleware and Routes setup
+  app.use(cors());
+  app.use(express.json());
 
-  // Ecommerce home route
-  app.get("/", (req, res) => {
-    res.send("Welcome to my API! e-commerce backend 🤳");
-  });
+  // Define your routes here (e.g., userRoutes, productRoutes, etc.)
 
-  // Image folder
-  app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-  // Start server
+  // Start the server
   app.listen(port, () => {
-    console.log(`🚀 Server listening at ${port}`);
+    console.log(`🚀 Server listening at http://localhost:${port}`);
   });
 }).catch((err) => {
   console.error("❌ Failed to connect to DB. Server not started.", err);
