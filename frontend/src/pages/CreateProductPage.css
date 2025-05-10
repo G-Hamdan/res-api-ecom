@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Rajdhani:wght@400;600&display=swap');
+
+.form-container {
+  max-width: 640px;
+  margin: 60px auto;
+  padding: 36px;
+  background-color: #1a1a1a;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(126, 34, 206, 0.2);
+  color: #f5f5f5;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+.form-container h2 {
+  margin-bottom: 28px;
+  font-size: 2.2rem;
+  font-family: 'Anton', sans-serif;
+  text-align: center;
+  color: #a855f7; /* Purple headline */
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.product-form input,
+.product-form textarea,
+.product-form select {
+  padding: 14px 16px;
+  border: 1px solid #333;
+  border-radius: 10px;
+  font-size: 16px;
+  background-color: #111;
+  color: #f5f5f5;
+  font-family: 'Rajdhani', sans-serif;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-form input:focus,
+.product-form textarea:focus,
+.product-form select:focus {
+  border-color: #0fdb8b;
+  box-shadow: 0 0 8px #0fdb8b50;
+  outline: none;
+}
+
+.product-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.product-form button {
+  background-color: #085809;
+  color: #000;
+  font-weight: bold;
+  padding: 14px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+.product-form button:hover {
+  background-color: #22c55e;
+  transform: scale(1.03);
+}
+
+.error {
+  color: #f87171;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 12px;
+}

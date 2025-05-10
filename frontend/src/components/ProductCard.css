@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Rajdhani:wght@400;600&display=swap');
+
+.product-card {
+  background-color: #1a1a1a;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Rajdhani', sans-serif;
+  max-width: 260px;
+  width: 100%;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(15, 219, 139, 0.2);
+}
+
+.product-image {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+}
+
+.product-info {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.category-tag {
+  background-color: #0fdb8b;
+  color: #000;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
+.product-info h3 {
+  margin: 8px 0;
+  font-size: 20px;
+  font-family: 'Anton', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.price {
+  color: #0fdb8b;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.description {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.view-button {
+  background-color: #0fdb8b;
+  border: none;
+  color: #000;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.95rem;
+}
+
+.view-button:hover {
+  background-color: #0cc27e;
+}

@@ -1,0 +1,49 @@
+.cart-page {
+  padding: 20px;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.cart-item img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.cart-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-info input {
+  width: 60px;
+  margin-top: 10px;
+}
+
+.cart-summary {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.checkout-btn {
+  background-color: #7e22ce;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.checkout-btn:hover {
+  background-color: #a855f7;
+}
