@@ -5,7 +5,11 @@ const { connectDB } = require("./utils/db"); // Import the connectDB function
 
 const app = express();
 const port = process.env.PORT || 3000;
+const userRoutes = require("./routes/users");
+const productRoutes = require("./routes/products");
 
+app.use("/api/users", userRoutes);
+app.use("/api/products", productRoutes);
 // Ensure DB is connected before starting the server
 connectDB().then(() => {
   console.log("✅ DB connection established");
@@ -22,7 +26,7 @@ connectDB().then(() => {
 
   // Start the server
   app.listen(port, () => {
-    console.log(`🚀 Server listening at http://localhost:${port}`);
+    console.log(`🚀 Server listening at ${port}`);
   });
 }).catch((err) => {
   console.error("❌ Failed to connect to DB. Server not started.", err);

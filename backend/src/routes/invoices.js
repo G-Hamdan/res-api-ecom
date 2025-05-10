@@ -5,6 +5,7 @@ const { verifyToken } = require("../middleware/auth");
 const upload = require("../middleware/multerConfig");
 const sharpMiddleware = require("../middleware/sharpMiddleware");
 
+
 // Legacy route (with image)
 router.post(
   "/add",
