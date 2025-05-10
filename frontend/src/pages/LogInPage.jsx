@@ -12,7 +12,7 @@ const LogInPage = ({ setIsLoggedIn }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://hardcoregear.netlify.app/api/users/login", {
+      const response = await fetch("https://res-api-ecom.onrender.com/api/users/login", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
