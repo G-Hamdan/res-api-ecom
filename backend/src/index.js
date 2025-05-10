@@ -11,7 +11,11 @@ connectDB().then(() => {
   console.log("✅ DB connection established");
 
   // Middleware and Routes setup
-  app.use(cors());
+  app.use(cors({
+    origin: "https://hardcoregear.netlify.app", // Or use '*' to allow all origins
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
+  }));
   app.use(express.json());
 
   // Define your routes here (e.g., userRoutes, productRoutes, etc.)
